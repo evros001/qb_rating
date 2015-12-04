@@ -59,7 +59,8 @@ $(document).ready(function(){
   }
   
   function pointsPerDrivePoints(ppd){
-    return ppd * 5;
+    return ppd * 10;
+    
   }
   
   function rushingPoints(rushYards, rushTds){
