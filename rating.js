@@ -98,11 +98,11 @@ $(document).ready(function(){
     var ppdPoints = pointsPerDrivePoints(ppd);
     var rushPoints = rushingPoints(rushYards, rushTds);
     
-    return attPoints + compPoints + percentPoints + tdPoints + winPnts + ppdPoints + rushPoints;
+    return attPoints + compPoints + percentPoints + yrdPoints + tdPoints + winPnts + ppdPoints + rushPoints;
   }
   
   calculateButton.click(function(){
-    var score = calculateRating(attempts, completions, completionPercentage, tds, ints, win, ppd, rushYards, rushTds, target);
+    var score = calculateRating(attempts, completions, completionPercentage, yards, tds, ints, win, ppd, rushYards, rushTds, target);
     target.innerHTML = score.toString();
   });
   
