@@ -1,112 +1,239 @@
-// completion% (/10) 7.5
-// attempts (/10) 3.0
-// completions (/10) 4.0
-// tds (*2.5) 7
-// ints (-5/per) -5
-// points/drive (*5) 13.4 
-// win? (*10) 5
-// if rushing yards exceeds 20yards [<20 yrds]
-// rushing yards (/2) [*.10] 1
-// rushing tds (*2) (*2) 2
+import {
+  createStore,
+  combineReducers,
+} from 'redux';
 
-$(document).ready(function(){
-  var attempts = $(".attempts")[0];
-  var completions = $(".completions")[0];
-  var completionPercentage = $(".percentage")[0];
-  var yards = $(".yards")[0];
-  var tds = $(".tds")[0];
-  var ints = $(".ints")[0];
-  var win = $(".win")[0];
-  var ppd = $(".pointsPerDrive")[0];
-  var rushYards = $(".rushYrds")[0];
-  var rushTds = $(".rushTds")[0];
-  var target = $(".score")[0];
-  debugger;
-  
-  var calculateButton = $(".calculate")
-  
-  function attemptsPoints(attempts){
-    return attempts / 10;
-  }
-  
-  function completionPoints(completions){
-    return completions / 10;
-  }
-  
-  function completionPercentagePoints(completionPercentage){
-    return completionPercentage / 10;
-  }
-  
-  function yardsPoints(yards) {
-    return yards / 10
-  }
-  
-  function touchdownPoints(tds){
-    debugger;
-    return tds * 10;
-  }
-  
-  function interceptionPoints(ints){
-    if (ints < 1) {
-      return 1.75
-    } else {
-      return ints * -2;
-    }
-  }
-  
-  function winPoints(win){
-    return 5;
-  }
-  
-  function pointsPerDrivePoints(ppd){
-    return ppd * 10;
-    
-  }
-  
-  function rushingPoints(rushYards, rushTds){
-    if (rushYards > 20) {
-      var yrdPoints = rushYards / 2;
-      var yrdTds = rushTds * 2;
-      return yrdPoints + yrdTds;
-    } else {
-      debugger;
-      var yrdPoints = rushYards / 10;
-      var yrdTds = rushTds * 2;
-      return yrdPoints + yrdTds;
-    }
-  }
-  
-  function calculateRating(attempts, completions, completionPercentage, yards, tds, ints, win, ppd, rushYards, rushTds){
-    var attempts = parseInt(attempts.value);
-    var completions = parseInt(completions.value);
-    var completionPercentage = parseInt(completionPercentage.value);
-    var yards = parseInt(yards.value);
-    var tds = parseInt(tds.value);
-    var ints = parseInt(ints.value);
-    var win = parseInt(win.value);
-    var ppd = parseInt(ppd.value);
-    var rushYards = parseInt(rushYards.value);
-    var rushTds = parseInt(rushTds.value);
-    debugger;
+// COMBINE REDUCERS
 
-
-    var attPoints = attemptsPoints(attempts);
-    var compPoints = completionPoints(completions);
-    var percentPoints = completionPercentagePoints(completionPercentage);
-    var yrdPoints = yardsPoints(yards); 
-    var tdPoints = touchdownPoints(tds);
-    var winPnts = winPoints(win);
-    var ppdPoints = pointsPerDrivePoints(ppd);
-    var rushPoints = rushingPoints(rushYards, rushTds);
-    
-    return attPoints + compPoints + percentPoints + yrdPoints + tdPoints + winPnts + ppdPoints + rushPoints;
-  }
-  
-  calculateButton.click(function(){
-    var score = calculateRating(attempts, completions, completionPercentage, yards, tds, ints, win, ppd, rushYards, rushTds, target);
-    target.innerHTML = score.toString();
-  });
-  
+const rootReducer = combineReducers({
+  attempt: attemptReducer,
+  completion: completionReducer,
+  completionPercentage: completionPercentageReducer,
+  yards: yardsReducer,
+  tds: tdsReducer,
+  ints: intsReducer,
+  win: winReducer,
+  ppd: ppdReducer,
+  rushYards: rushYardReducer,
+  rushTds: rushTdReducer,
 });
 
+// CREATE STORE
 
+const store = createStore(rootReducer);
+
+// BEGIN REDUCERS
+
+// ATTEMPTS
+function attemptReducer(state = 0, action) {
+  switch (action.type) {
+  case 'ATTEMPTS_POINTS':
+    const attemptPoints = action.value / 10;
+    return state + attemptPoints;
+  default:
+    return state;
+  }
+}
+
+// COMPLETIONS
+function completionReducer(state = 0, action) {
+  switch (action.type) {
+  case 'COMPLETIONS_POINTS':
+    const completionPoints = action.value / 10;
+    return state + completionPoints;
+  default:
+    return state;
+  }
+}
+
+// COMPLETION PERCENTAGE
+function completionPercentageReducer(state = 0, action) {
+  switch (action.type) {
+  case 'COMPLETIONS_POINTS':
+    const completionPercentagePoints = action.value / 10;
+    return state + completionPercentagePoints;
+  default:
+    return state;
+  }
+}
+
+// YARDS
+function yardsReducer(state = 0, action) {
+  switch (action.type) {
+  case 'YARDS_POINTS':
+    const yardsPoints = action.value / 10;
+    return state + yardsPoints;
+  default:
+    return state;
+  }
+}
+
+// TDS
+function tdsReducer(state = 0, action) {
+  switch (action.type) {
+  case 'TDS_POINTS':
+    const tdsPoints = action.value * 10;
+    return state + tdsPoints;
+  default:
+    return state;
+  }
+}
+
+// INTS
+function intsReducer(state = 0, action) {
+  switch (action.type) {
+  case 'INTS_POINTS':
+    const intsPoints = action.value;
+    if (intsPoints < 1) {
+      return state + 1.75
+    } else {
+      return state + (intsPoints * -2)
+    }
+  default:
+    return state;
+  }
+}
+
+// WIN
+function winReducer(state = 0, action) {
+  switch (action.type) {
+  case 'WIN_POINTS':
+    const winPoints = action.value * 5;
+    return state + winPoints;
+  default:
+    return state;
+  }
+}
+
+// PPD
+function ppdReducer(state = 0, action) {
+  switch (action.type) {
+  case 'PPD_POINTS':
+    const ppdPoints = action.value * 10;
+    return state + ppdPoints;
+  default:
+    return state;
+  }
+}
+
+// RUSH YARD STATS
+function rushYardReducer(state = 0, action) {
+  switch (action.type) {
+  case 'RUSH_YARD_POINTS':
+    const rushYardPoints = action.value;
+    if (rushYardPoints > 20) {
+      const trueRushYardPoints = rushYardPoints / 2;
+      return state + trueRushYardPoints;
+    } else {
+      const trueRushYardPoints = rushYardPoints / 10;
+      return state + trueRushYardPoints;
+    }
+  default:
+    return state;
+  }
+}
+
+// RUSH TD STATS
+function rushTdReducer(state = 0, action) {
+  switch (action.type) {
+  case 'RUSH_TDS_POINTS':
+    const rushTdPoints = action.value * 2;
+    return state + rushTdPoints;
+  default:
+    return state;
+  }
+}
+
+
+// END REDUCERS
+
+// BEGIN ACTIONS
+const attempts = document.getElementById('attempts');
+attempts.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'ATTEMPTS_POINTS',
+    value: attempts.value,
+  });
+}, false);
+
+
+const completions = document.getElementById('completions');
+completions.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'COMPLETIONS_POINTS',
+    value: completions.value,
+  });
+}, false);
+
+const completionPercentage = document.getElementById('percentage');
+completionPercentage.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'COMPLETION_PERCENTAGE_POINTS',
+    value: completionPercentage.value,
+  });
+}, false);
+
+const yards = document.getElementById('yards');
+yards.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'YARDS_POINTS',
+    value: yards.value,
+  });
+}, false);
+
+const tds = document.getElementById('tds');
+tds.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'TDS_POINTS',
+    value: tds.value,
+  });
+}, false);
+
+const ints = document.getElementById('ints');
+ints.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'INTS_POINTS',
+    value: ints.value,
+  });
+}, false);
+
+const win = document.getElementById('win');
+win.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'WIN_POINTS',
+    value: win.value,
+  });
+}, false);
+
+const ppd = document.getElementById('pointsPerDrive');
+ppd.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'PPD_POINTS',
+    value: ppd.value,
+  });
+}, false);
+
+const rushYards = document.getElementById('rushYrds');
+rushYards.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'RUSH_YARD_POINTS',
+    value: rushYards.value,
+  });
+}, false);
+
+const rushTds = document.getElementById('rushTds');
+rushTds.addEventListener('keyup', () => {
+  store.dispatch({
+    type: 'RUSH_TDS_POINTS',
+    value: rushTds.value,
+  });
+}, false);
+
+// SUBSCRIBE
+const score = document.getElementById('score');
+const renderScore = (score) => {
+  debugger;
+  score.innerText = store.getState();
+};
+
+renderScore(score);

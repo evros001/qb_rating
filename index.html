@@ -7,40 +7,40 @@
   </head>
   <body>
       <label for="attempts">Passing Attempts</label>
-      <input class="attempts" type="text" name="attempts" value="0">
+      <input id="attempts" type="text" name="attempts" value="0">
       <br>
       <label for="completions">Completions</label>
-      <input class="completions" type="text" name="completions" value="0">
-      <br> 
+      <input id="completions" type="text" name="completions" value="0">
+      <br>
       <label for="completionPercentage">Completion %</label>
-      <input class="percentage" type="text" name="completionPercentage" value="0">
+      <input id="percentage" type="text" name="completionPercentage" value="0">
       <br>
       <label for="yards">Yards</label>
-      <input class="yards" type="text" name="yards" value="0">
+      <input id="yards" type="text" name="yards" value="0">
       <br>
       <label for="touchdowns">TDs</label>
-      <input class="tds" type="text" name="touchdowns" value="0">
+      <input id="tds" type="text" name="touchdowns" value="0">
       <br>
       <label for="ints">INTS</label>
-      <input class="ints" type="text" name="ints" value="0">
+      <input id="ints" type="text" name="ints" value="0">
       <br>
       <label for="win?">Win ? (1 for yes, 0 for no please!)</label>
-      <input class="win" type="text" name="win?" value="0">
+      <input id="win" type="text" name="win?" value="0">
       <br>
       <label for="pointsPerDrive">Points Per Drive</label>
-      <input class="pointsPerDrive" type="text" name="pointsPerDrive" value="0">
+      <input id="pointsPerDrive" type="text" name="pointsPerDrive" value="0">
       <br>
       <label for="rushYards">Rushing Yards</label>
-      <input class="rushYrds" type="text" name="rushYards" value="0">
+      <input id="rushYrds" type="text" name="rushYards" value="0">
       <br>
       <label for="rushTDs">Rushing TDs</label>
-      <input class="rushTds" type="text" name="rushTDs" value="0">
+      <input id="rushTds" type="text" name="rushTDs" value="0">
       <br>
       <button type="button" class="calculate">Calculate</button>
-      <script type="text/javascript" src="./rating.js"></script> 
       <br><br><br>
       <div class="score-container">
-        Rating: <span class="score"></span>
+        Rating: <span id="score"></span>
       </div>
+      <script type="text/javascript" src="./public/assets/bundle.js"></script>
   </body>
 </html>
