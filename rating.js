@@ -233,7 +233,7 @@ rushTds.addEventListener('keyup', () => {
 const score = document.getElementById('score');
 const renderScore = (score) => {
   debugger;
-  score.innerText = store.getState();
+  score.innerText = store.getState().attempt + store.getState().completion + store.getState().completionPercentage + store.getState().yards + store.getState().tds +  store.getState().ints + store.getState().win + store.getState().ppd + store.getState().rushYards + store.getState().rushTds
 };
 
 renderScore(score);

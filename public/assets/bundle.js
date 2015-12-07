@@ -72,17 +72,6 @@
 
 	// CREATE STORE
 
-	// completion% (/10) 7.5
-	// attempts (/10) 3.0
-	// completions (/10) 4.0
-	// tds (*2.5) 7
-	// ints (-5/per) -5
-	// points/drive (*5) 13.4
-	// win? (*10) 5
-	// if rushing yards exceeds 20yards [<20 yrds]
-	// rushing yards (/2) [*.10] 1
-	// rushing tds (*2) (*2) 2
-
 	var store = (0, _redux.createStore)(rootReducer);
 
 	// BEGIN REDUCERS
@@ -324,7 +313,7 @@
 	var score = document.getElementById('score');
 	var renderScore = function renderScore(score) {
 	  debugger;
-	  score.innerText = store.getState();
+	  score.innerText = store.getState().attempt + store.getState().completion + store.getState().completionPercentage + store.getState().yards + store.getState().tds + store.getState().ints + store.getState().win + store.getState().ppd + store.getState().rushYards + store.getState().rushTds;
 	};
 
 	renderScore(score);
