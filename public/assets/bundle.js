@@ -84,6 +84,7 @@
 	  switch (action.type) {
 	    case 'ATTEMPTS_POINTS':
 	      var attemptPoints = action.value / 10;
+	      console.log("attempts = " + attemptPoints);
 	      return state + attemptPoints;
 	    default:
 	      return state;
@@ -98,6 +99,7 @@
 	  switch (action.type) {
 	    case 'COMPLETIONS_POINTS':
 	      var completionPoints = action.value / 10;
+	      console.log("completion = " + completionPoints);
 	      return state + completionPoints;
 	    default:
 	      return state;
@@ -110,8 +112,9 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case 'COMPLETIONS_POINTS':
+	    case 'COMPLETION_PERCENTAGE_POINTS':
 	      var completionPercentagePoints = action.value / 10;
+	      console.log("completion PERCENTAGE = " + completionPercentagePoints + "action value = " + action.value);
 	      return state + completionPercentagePoints;
 	    default:
 	      return state;
@@ -126,6 +129,7 @@
 	  switch (action.type) {
 	    case 'YARDS_POINTS':
 	      var yardsPoints = action.value / 10;
+	      console.log("yards = " + yardsPoints);
 	      return state + yardsPoints;
 	    default:
 	      return state;
@@ -140,6 +144,7 @@
 	  switch (action.type) {
 	    case 'TDS_POINTS':
 	      var tdsPoints = action.value * 10;
+	      console.log("tds = " + tdsPoints);
 	      return state + tdsPoints;
 	    default:
 	      return state;
@@ -151,6 +156,7 @@
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	  var action = arguments[1];
 
+	  debugger;
 	  switch (action.type) {
 	    case 'INTS_POINTS':
 	      var intsPoints = action.value;
@@ -172,6 +178,7 @@
 	  switch (action.type) {
 	    case 'WIN_POINTS':
 	      var winPoints = action.value * 5;
+	      console.log("win = " + winPoints);
 	      return state + winPoints;
 	    default:
 	      return state;
@@ -186,6 +193,7 @@
 	  switch (action.type) {
 	    case 'PPD_POINTS':
 	      var ppdPoints = action.value * 10;
+	      console.log("ppd = " + ppdPoints);
 	      return state + ppdPoints;
 	    default:
 	      return state;
@@ -202,6 +210,7 @@
 	      var rushYardPoints = action.value;
 	      if (rushYardPoints > 20) {
 	        var trueRushYardPoints = rushYardPoints / 2;
+	        console.log("rush yards = " + trueRushYardPoints);
 	        return state + trueRushYardPoints;
 	      } else {
 	        var trueRushYardPoints = rushYardPoints / 10;
@@ -220,6 +229,7 @@
 	  switch (action.type) {
 	    case 'RUSH_TDS_POINTS':
 	      var rushTdPoints = action.value * 2;
+	      console.log("rush tds = " + rushTdPoints);
 	      return state + rushTdPoints;
 	    default:
 	      return state;
@@ -310,13 +320,18 @@
 	}, false);
 
 	// SUBSCRIBE
-	var score = document.getElementById('score');
+	var scoreValue = document.getElementById('score');
 	var renderScore = function renderScore(score) {
-	  debugger;
-	  score.innerText = store.getState().attempt + store.getState().completion + store.getState().completionPercentage + store.getState().yards + store.getState().tds + store.getState().ints + store.getState().win + store.getState().ppd + store.getState().rushYards + store.getState().rushTds;
+	  if (store.getState().attempt != 0 && store.getState().completion != 0 && store.getState().completionPercentage != 0 && store.getState().yards != 0 && store.getState().tds != 0 && store.getState().ppd != 0 && store.getState().rushYards != 0 && store.getState().rushTds != 0) {
+	    scoreValue.innerText = store.getState().attempt + store.getState().completion + store.getState().completionPercentage + store.getState().yards + store.getState().tds + store.getState().ints + store.getState().win + store.getState().ppd + store.getState().rushYards + store.getState().rushTds;
+	  } else {
+	    scoreValue.innerText = 0;
+	  }
 	};
 
 	renderScore(score);
+
+	store.subscribe(renderScore);
 
 /***/ },
 /* 2 */
