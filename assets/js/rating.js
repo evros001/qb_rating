@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   ppd: ppdReducer,
   rushYards: rushYardReducer,
   rushTds: rushTdReducer,
+  reset: resetReducer
 });
 
 // CREATE STORE
@@ -29,11 +30,12 @@ function attemptReducer(state = 0, action) {
   switch (action.type) {
   case 'ATTEMPTS_POINTS':
     const attemptPoints = action.value / 10;
-    console.log("attempts = " + attemptPoints);
+    console.log("attempts  = " + attemptPoints + state);
     return state + attemptPoints;
   default:
     return state;
   }
+  console.log("state = " + state)
 }
 
 // COMPLETIONS
@@ -53,7 +55,7 @@ function completionPercentageReducer(state = 0, action) {
   switch (action.type) {
   case 'COMPLETION_PERCENTAGE_POINTS':
     const completionPercentagePoints = action.value / 10;
-    console.log("completion PERCENTAGE = " + completionPercentagePoints + "action value = " + action.value);
+    console.log("completion PERCENTAGE = " + completionPercentagePoints);
     return state + completionPercentagePoints;
   default:
     return state;
@@ -86,14 +88,14 @@ function tdsReducer(state = 0, action) {
 
 // INTS
 function intsReducer(state = 0, action) {
-  debugger;
   switch (action.type) {
   case 'INTS_POINTS':
     const intsPoints = action.value;
-    if (intsPoints < 1) {
+    const intIntsPoints = parseInt(intsPoints);
+    if (intIntsPoints < 1) {
       return state + 1.75
     } else {
-      return state + (intsPoints * -2)
+      return state + (intIntsPoints * -2)
     }
   default:
     return state;
@@ -129,12 +131,13 @@ function rushYardReducer(state = 0, action) {
   switch (action.type) {
   case 'RUSH_YARD_POINTS':
     const rushYardPoints = action.value;
-    if (rushYardPoints > 20) {
-      const trueRushYardPoints = rushYardPoints / 2;
+    const intRushYardPoints = parseInt(rushYardPoints);
+    if (intRushYardPoints > 20) {
+      const trueRushYardPoints = intRushYardPoints/ 2;
       console.log("rush yards = " + trueRushYardPoints);
       return state + trueRushYardPoints;
     } else {
-      const trueRushYardPoints = rushYardPoints / 10;
+      const trueRushYardPoints = intRushYardPoints / 10;
       return state + trueRushYardPoints;
     }
   default:
@@ -159,7 +162,7 @@ function rushTdReducer(state = 0, action) {
 
 // BEGIN ACTIONS
 const attempts = document.getElementById('attempts');
-attempts.addEventListener('keyup', () => {
+attempts.addEventListener('change', () => {
   store.dispatch({
     type: 'ATTEMPTS_POINTS',
     value: attempts.value,
@@ -168,7 +171,7 @@ attempts.addEventListener('keyup', () => {
 
 
 const completions = document.getElementById('completions');
-completions.addEventListener('keyup', () => {
+completions.addEventListener('change', () => {
   store.dispatch({
     type: 'COMPLETIONS_POINTS',
     value: completions.value,
@@ -176,7 +179,7 @@ completions.addEventListener('keyup', () => {
 }, false);
 
 const completionPercentage = document.getElementById('percentage');
-completionPercentage.addEventListener('keyup', () => {
+completionPercentage.addEventListener('change', () => {
   store.dispatch({
     type: 'COMPLETION_PERCENTAGE_POINTS',
     value: completionPercentage.value,
@@ -184,7 +187,7 @@ completionPercentage.addEventListener('keyup', () => {
 }, false);
 
 const yards = document.getElementById('yards');
-yards.addEventListener('keyup', () => {
+yards.addEventListener('change', () => {
   store.dispatch({
     type: 'YARDS_POINTS',
     value: yards.value,
@@ -192,7 +195,7 @@ yards.addEventListener('keyup', () => {
 }, false);
 
 const tds = document.getElementById('tds');
-tds.addEventListener('keyup', () => {
+tds.addEventListener('change', () => {
   store.dispatch({
     type: 'TDS_POINTS',
     value: tds.value,
@@ -200,7 +203,7 @@ tds.addEventListener('keyup', () => {
 }, false);
 
 const ints = document.getElementById('ints');
-ints.addEventListener('keyup', () => {
+ints.addEventListener('change', () => {
   store.dispatch({
     type: 'INTS_POINTS',
     value: ints.value,
@@ -208,7 +211,7 @@ ints.addEventListener('keyup', () => {
 }, false);
 
 const win = document.getElementById('win');
-win.addEventListener('keyup', () => {
+win.addEventListener('change', () => {
   store.dispatch({
     type: 'WIN_POINTS',
     value: win.value,
@@ -216,7 +219,7 @@ win.addEventListener('keyup', () => {
 }, false);
 
 const ppd = document.getElementById('pointsPerDrive');
-ppd.addEventListener('keyup', () => {
+ppd.addEventListener('change', () => {
   store.dispatch({
     type: 'PPD_POINTS',
     value: ppd.value,
@@ -224,7 +227,7 @@ ppd.addEventListener('keyup', () => {
 }, false);
 
 const rushYards = document.getElementById('rushYrds');
-rushYards.addEventListener('keyup', () => {
+rushYards.addEventListener('change', () => {
   store.dispatch({
     type: 'RUSH_YARD_POINTS',
     value: rushYards.value,
@@ -232,7 +235,15 @@ rushYards.addEventListener('keyup', () => {
 }, false);
 
 const rushTds = document.getElementById('rushTds');
-rushTds.addEventListener('keyup', () => {
+rushTds.addEventListener('change', () => {
+  store.dispatch({
+    type: 'RUSH_TDS_POINTS',
+    value: rushTds.value,
+  });
+}, false);
+
+const resetReducer = document.getElementById('rushTds');
+rushTds.addEventListener('change', () => {
   store.dispatch({
     type: 'RUSH_TDS_POINTS',
     value: rushTds.value,
@@ -248,8 +259,23 @@ const renderScore = (score) => {
       store.getState().yards != 0 &&
       store.getState().tds != 0 &&
       store.getState().ppd != 0 &&
-      store.getState().rushYards != 0 &&
-      store.getState().rushTds != 0) {
+      store.getState().rushYards != 0) {
+      // const numberRating = (store.getState().attempt +
+      //                   store.getState().completion +
+      //                   store.getState().completionPercentage +
+      //                   store.getState().yards +
+      //                   store.getState().tds +
+      //                   store.getState().ints +
+      //                   store.getState().win +
+      //                   store.getState().ppd +
+      //                   store.getState().rushYards +
+      //                   store.getState().rushTds);
+      // console.log("total points =" + numberRating);
+      // const playerNode = document.createElement("p");
+      // const playerNodeText = document.createTextNode("player =" + numberRating); 
+      // playerNode.appendChild(playerNodeText);
+      // console.log("node =" + playerNode);
+      // scoreValue.appendChild(playerNode);
         scoreValue.innerText = store.getState().attempt +
                           store.getState().completion +
                           store.getState().completionPercentage +
@@ -259,8 +285,18 @@ const renderScore = (score) => {
                           store.getState().win +
                           store.getState().ppd +
                           store.getState().rushYards +
-                          store.getState().rushTds
-      } else {
+                          store.getState().rushTds;
+      // store.getState().completion = 0;
+      // store.getState().completionPercentage = 0;
+      // store.getState().yards = 0;
+      // store.getState().tds = 0;
+      // store.getState().ints = 0;
+      // store.getState().win = 0;
+      // store.getState().ppd = 0;
+      // store.getState().rushYards = 0;
+      // store.getState().rushTds = 0;
+}
+      else {
         scoreValue.innerText = 0
       }
 };

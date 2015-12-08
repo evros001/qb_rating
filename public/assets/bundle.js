@@ -53,7 +53,102 @@
 
 	'use strict';
 
-	var _redux = __webpack_require__(2);
+	__webpack_require__(2);
+	__webpack_require__(3);
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	// ATTEMPTS
+
+	var attemptValues = "";
+	for (var i = 0; i <= 100; i++) {
+	    attemptValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('attempts').innerHTML = attemptValues;
+
+	// COMPLETIONS
+
+	var completionValues = "";
+	for (var i = 0; i <= 100; i++) {
+	    completionValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('completions').innerHTML = completionValues;
+
+	// COMPLETION PERCENTAGE
+
+	var percentageValues = "";
+	for (var i = 0; i <= 100; i++) {
+	    percentageValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('percentage').innerHTML = percentageValues;
+
+	// YARDS
+
+	var yardValues = "";
+	for (var i = 0; i <= 1000; i++) {
+	    yardValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('yards').innerHTML = yardValues;
+
+	// TDS
+
+	var tdValues = "";
+	for (var i = 0; i <= 10; i++) {
+	    tdValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('tds').innerHTML = tdValues;
+
+	// INTS
+
+	var intValues = "";
+	for (var i = 0; i <= 10; i++) {
+	    intValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('ints').innerHTML = tdValues;
+
+	// WIN
+
+	var winValues = "";
+	for (var i = 0; i <= 1; i++) {
+	    winValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('win').innerHTML = winValues;
+
+	// POINTS PER DRIVE
+
+	var ppdValues = "";
+	for (var i = 0.0; i <= 5.0; i += 0.1) {
+	    ppdValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('pointsPerDrive').innerHTML = ppdValues;
+
+	// RUSH YARDS
+
+	var rushYardValues = "";
+	for (var i = 0; i <= 300; i++) {
+	    rushYardValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('rushYrds').innerHTML = rushYardValues;
+
+	// RUSH TDS
+
+	var rushTdValues = "";
+	for (var i = 0; i <= 10; i++) {
+	    rushTdValues += "<option value=" + i + ">" + i + "</option>";
+	}
+	document.getElementById('rushTds').innerHTML = rushTdValues;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _redux = __webpack_require__(4);
 
 	// COMBINE REDUCERS
 
@@ -67,7 +162,8 @@
 	  win: winReducer,
 	  ppd: ppdReducer,
 	  rushYards: rushYardReducer,
-	  rushTds: rushTdReducer
+	  rushTds: rushTdReducer,
+	  reset: resetReducer
 	});
 
 	// CREATE STORE
@@ -84,11 +180,12 @@
 	  switch (action.type) {
 	    case 'ATTEMPTS_POINTS':
 	      var attemptPoints = action.value / 10;
-	      console.log("attempts = " + attemptPoints);
+	      console.log("attempts  = " + attemptPoints + state);
 	      return state + attemptPoints;
 	    default:
 	      return state;
 	  }
+	  console.log("state = " + state);
 	}
 
 	// COMPLETIONS
@@ -114,7 +211,7 @@
 	  switch (action.type) {
 	    case 'COMPLETION_PERCENTAGE_POINTS':
 	      var completionPercentagePoints = action.value / 10;
-	      console.log("completion PERCENTAGE = " + completionPercentagePoints + "action value = " + action.value);
+	      console.log("completion PERCENTAGE = " + completionPercentagePoints);
 	      return state + completionPercentagePoints;
 	    default:
 	      return state;
@@ -156,14 +253,14 @@
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
 	  var action = arguments[1];
 
-	  debugger;
 	  switch (action.type) {
 	    case 'INTS_POINTS':
 	      var intsPoints = action.value;
-	      if (intsPoints < 1) {
+	      var intIntsPoints = parseInt(intsPoints);
+	      if (intIntsPoints < 1) {
 	        return state + 1.75;
 	      } else {
-	        return state + intsPoints * -2;
+	        return state + intIntsPoints * -2;
 	      }
 	    default:
 	      return state;
@@ -208,12 +305,13 @@
 	  switch (action.type) {
 	    case 'RUSH_YARD_POINTS':
 	      var rushYardPoints = action.value;
-	      if (rushYardPoints > 20) {
-	        var trueRushYardPoints = rushYardPoints / 2;
+	      var intRushYardPoints = parseInt(rushYardPoints);
+	      if (intRushYardPoints > 20) {
+	        var trueRushYardPoints = intRushYardPoints / 2;
 	        console.log("rush yards = " + trueRushYardPoints);
 	        return state + trueRushYardPoints;
 	      } else {
-	        var trueRushYardPoints = rushYardPoints / 10;
+	        var trueRushYardPoints = intRushYardPoints / 10;
 	        return state + trueRushYardPoints;
 	      }
 	    default:
@@ -240,7 +338,7 @@
 
 	// BEGIN ACTIONS
 	var attempts = document.getElementById('attempts');
-	attempts.addEventListener('keyup', function () {
+	attempts.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'ATTEMPTS_POINTS',
 	    value: attempts.value
@@ -248,7 +346,7 @@
 	}, false);
 
 	var completions = document.getElementById('completions');
-	completions.addEventListener('keyup', function () {
+	completions.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'COMPLETIONS_POINTS',
 	    value: completions.value
@@ -256,7 +354,7 @@
 	}, false);
 
 	var completionPercentage = document.getElementById('percentage');
-	completionPercentage.addEventListener('keyup', function () {
+	completionPercentage.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'COMPLETION_PERCENTAGE_POINTS',
 	    value: completionPercentage.value
@@ -264,7 +362,7 @@
 	}, false);
 
 	var yards = document.getElementById('yards');
-	yards.addEventListener('keyup', function () {
+	yards.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'YARDS_POINTS',
 	    value: yards.value
@@ -272,7 +370,7 @@
 	}, false);
 
 	var tds = document.getElementById('tds');
-	tds.addEventListener('keyup', function () {
+	tds.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'TDS_POINTS',
 	    value: tds.value
@@ -280,7 +378,7 @@
 	}, false);
 
 	var ints = document.getElementById('ints');
-	ints.addEventListener('keyup', function () {
+	ints.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'INTS_POINTS',
 	    value: ints.value
@@ -288,7 +386,7 @@
 	}, false);
 
 	var win = document.getElementById('win');
-	win.addEventListener('keyup', function () {
+	win.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'WIN_POINTS',
 	    value: win.value
@@ -296,7 +394,7 @@
 	}, false);
 
 	var ppd = document.getElementById('pointsPerDrive');
-	ppd.addEventListener('keyup', function () {
+	ppd.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'PPD_POINTS',
 	    value: ppd.value
@@ -304,7 +402,7 @@
 	}, false);
 
 	var rushYards = document.getElementById('rushYrds');
-	rushYards.addEventListener('keyup', function () {
+	rushYards.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'RUSH_YARD_POINTS',
 	    value: rushYards.value
@@ -312,7 +410,15 @@
 	}, false);
 
 	var rushTds = document.getElementById('rushTds');
-	rushTds.addEventListener('keyup', function () {
+	rushTds.addEventListener('change', function () {
+	  store.dispatch({
+	    type: 'RUSH_TDS_POINTS',
+	    value: rushTds.value
+	  });
+	}, false);
+
+	var resetReducer = document.getElementById('rushTds');
+	rushTds.addEventListener('change', function () {
 	  store.dispatch({
 	    type: 'RUSH_TDS_POINTS',
 	    value: rushTds.value
@@ -322,11 +428,36 @@
 	// SUBSCRIBE
 	var scoreValue = document.getElementById('score');
 	var renderScore = function renderScore(score) {
-	  if (store.getState().attempt != 0 && store.getState().completion != 0 && store.getState().completionPercentage != 0 && store.getState().yards != 0 && store.getState().tds != 0 && store.getState().ppd != 0 && store.getState().rushYards != 0 && store.getState().rushTds != 0) {
+	  if (store.getState().attempt != 0 && store.getState().completion != 0 && store.getState().completionPercentage != 0 && store.getState().yards != 0 && store.getState().tds != 0 && store.getState().ppd != 0 && store.getState().rushYards != 0) {
+	    // const numberRating = (store.getState().attempt +
+	    //                   store.getState().completion +
+	    //                   store.getState().completionPercentage +
+	    //                   store.getState().yards +
+	    //                   store.getState().tds +
+	    //                   store.getState().ints +
+	    //                   store.getState().win +
+	    //                   store.getState().ppd +
+	    //                   store.getState().rushYards +
+	    //                   store.getState().rushTds);
+	    // console.log("total points =" + numberRating);
+	    // const playerNode = document.createElement("p");
+	    // const playerNodeText = document.createTextNode("player =" + numberRating);
+	    // playerNode.appendChild(playerNodeText);
+	    // console.log("node =" + playerNode);
+	    // scoreValue.appendChild(playerNode);
 	    scoreValue.innerText = store.getState().attempt + store.getState().completion + store.getState().completionPercentage + store.getState().yards + store.getState().tds + store.getState().ints + store.getState().win + store.getState().ppd + store.getState().rushYards + store.getState().rushTds;
+	    // store.getState().completion = 0;
+	    // store.getState().completionPercentage = 0;
+	    // store.getState().yards = 0;
+	    // store.getState().tds = 0;
+	    // store.getState().ints = 0;
+	    // store.getState().win = 0;
+	    // store.getState().ppd = 0;
+	    // store.getState().rushYards = 0;
+	    // store.getState().rushTds = 0;
 	  } else {
-	    scoreValue.innerText = 0;
-	  }
+	      scoreValue.innerText = 0;
+	    }
 	};
 
 	renderScore(score);
@@ -334,7 +465,7 @@
 	store.subscribe(renderScore);
 
 /***/ },
-/* 2 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -343,23 +474,23 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _createStore = __webpack_require__(3);
+	var _createStore = __webpack_require__(5);
 
 	var _createStore2 = _interopRequireDefault(_createStore);
 
-	var _utilsCombineReducers = __webpack_require__(5);
+	var _utilsCombineReducers = __webpack_require__(7);
 
 	var _utilsCombineReducers2 = _interopRequireDefault(_utilsCombineReducers);
 
-	var _utilsBindActionCreators = __webpack_require__(9);
+	var _utilsBindActionCreators = __webpack_require__(11);
 
 	var _utilsBindActionCreators2 = _interopRequireDefault(_utilsBindActionCreators);
 
-	var _utilsApplyMiddleware = __webpack_require__(10);
+	var _utilsApplyMiddleware = __webpack_require__(12);
 
 	var _utilsApplyMiddleware2 = _interopRequireDefault(_utilsApplyMiddleware);
 
-	var _utilsCompose = __webpack_require__(11);
+	var _utilsCompose = __webpack_require__(13);
 
 	var _utilsCompose2 = _interopRequireDefault(_utilsCompose);
 
@@ -370,7 +501,7 @@
 	exports.compose = _utilsCompose2['default'];
 
 /***/ },
-/* 3 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -380,7 +511,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsIsPlainObject = __webpack_require__(4);
+	var _utilsIsPlainObject = __webpack_require__(6);
 
 	var _utilsIsPlainObject2 = _interopRequireDefault(_utilsIsPlainObject);
 
@@ -538,7 +669,7 @@
 	}
 
 /***/ },
-/* 4 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -573,7 +704,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -583,17 +714,17 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _createStore = __webpack_require__(3);
+	var _createStore = __webpack_require__(5);
 
-	var _utilsIsPlainObject = __webpack_require__(4);
+	var _utilsIsPlainObject = __webpack_require__(6);
 
 	var _utilsIsPlainObject2 = _interopRequireDefault(_utilsIsPlainObject);
 
-	var _utilsMapValues = __webpack_require__(7);
+	var _utilsMapValues = __webpack_require__(9);
 
 	var _utilsMapValues2 = _interopRequireDefault(_utilsMapValues);
 
-	var _utilsPick = __webpack_require__(8);
+	var _utilsPick = __webpack_require__(10);
 
 	var _utilsPick2 = _interopRequireDefault(_utilsPick);
 
@@ -707,10 +838,10 @@
 	}
 
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -807,7 +938,7 @@
 
 
 /***/ },
-/* 7 */
+/* 9 */
 /***/ function(module, exports) {
 
 	/**
@@ -832,7 +963,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 8 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/**
@@ -859,7 +990,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 9 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -869,7 +1000,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsMapValues = __webpack_require__(7);
+	var _utilsMapValues = __webpack_require__(9);
 
 	var _utilsMapValues2 = _interopRequireDefault(_utilsMapValues);
 
@@ -919,7 +1050,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 10 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -932,7 +1063,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _compose = __webpack_require__(11);
+	var _compose = __webpack_require__(13);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
@@ -985,7 +1116,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports) {
 
 	/**

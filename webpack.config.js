@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
 var Clean = require('clean-webpack-plugin');
-var entry = "./rating.js"
+var entry = "./assets/js/main.js"
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var ENV = process.env.NODE_ENV || "development";
