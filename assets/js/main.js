@@ -1,2 +1,2 @@
-require('./input.js');
+require('./findPlayerData.js');
 require('./rating.js');

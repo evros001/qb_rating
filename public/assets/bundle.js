@@ -54,101 +54,1139 @@
 	'use strict';
 
 	__webpack_require__(2);
-	__webpack_require__(3);
+	__webpack_require__(4);
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	// ATTEMPTS
+	var playerInputButton = document.getElementById('findRatingButton');
 
-	var attemptValues = "";
-	for (var i = 0; i <= 100; i++) {
-	    attemptValues += "<option value=" + i + ">" + i + "</option>";
+	function findPlayer(json, jsonLength, playerName) {
+	  for (var i = 0; i < jsonLength; i++) {
+	    if (json[i]["NAME"].toLowerCase() === playerName) {
+	      return json[i];
+	    } else {
+	      debugger;
+	      return "ERROR: No player found in database";
+	    }
+	  }
 	}
-	document.getElementById('attempts').innerHTML = attemptValues;
 
-	// COMPLETIONS
+	function calculatePointsPerDrive(jsonPlayerObject) {
+	  var ppg = parseInt(jsonPlayerObject["POINTS_PER_GAME"]);
+	  var dpg = parseInt(jsonPlayerObject["DRIVES_PER_GAME"]);
 
-	var completionValues = "";
-	for (var i = 0; i <= 100; i++) {
-	    completionValues += "<option value=" + i + ">" + i + "</option>";
+	  return ppg / dpg;
 	}
-	document.getElementById('completions').innerHTML = completionValues;
 
-	// COMPLETION PERCENTAGE
+	function populatePlayerInputData(jsonPlayerObject) {
+	  var attemptsTarget = document.getElementById('attempts');
+	  var completionsTarget = document.getElementById('completions');
+	  var completionPercentageTarget = document.getElementById('percentage');
+	  var yardsTarget = document.getElementById('yards');
+	  var tdsTarget = document.getElementById('tds');
+	  var intsTarget = document.getElementById('ints');
+	  var winTarget = document.getElementById('win');
+	  var ppdTarget = document.getElementById('pointsPerDrive');
 
-	var percentageValues = "";
-	for (var i = 0; i <= 100; i++) {
-	    percentageValues += "<option value=" + i + ">" + i + "</option>";
+	  var attempts = parseInt(jsonPlayerObject["ATTEMPTS"]);
+	  var completions = parseInt(jsonPlayerObject["COMPLETIONS"]);
+	  var completion_percentage = parseInt(jsonPlayerObject["COMPLETION_PERCENTAGE"]);
+	  var yards = parseInt(jsonPlayerObject["YARDS"]);
+	  var tds = parseInt(jsonPlayerObject["TOUCHDOWNS"]);
+	  var ints = parseInt(jsonPlayerObject["INTERCEPTIONS"]);
+	  var wins = parseInt(jsonPlayerObject["RECORD"].split("-")[0]);
+	  var ppd = calculatePointsPerDrive(jsonPlayerObject);
+
+	  attemptsTarget.value = attempts;
+	  completionsTarget.value = completions;
+	  completionPercentageTarget.value = completion_percentage;
+	  yardsTarget.value = yards;
+	  tdsTarget.value = tds;
+	  intsTarget.value = ints;
+	  winTarget.value = wins;
+	  ppdTarget.value = ppd;
 	}
-	document.getElementById('percentage').innerHTML = percentageValues;
 
-	// YARDS
+	playerInputButton.addEventListener("click", function () {
+	  var jsonStats = __webpack_require__(3);
 
-	var yardValues = "";
-	for (var i = 0; i <= 1000; i++) {
-	    yardValues += "<option value=" + i + ">" + i + "</option>";
-	}
-	document.getElementById('yards').innerHTML = yardValues;
+	  var jsonLength = jsonStats.length;
+	  var playerInputField = document.getElementById('name');
+	  var playerName = playerInputField.value.toLowerCase();
 
-	// TDS
+	  var jsonPlayerObject = findPlayer(jsonStats, jsonLength, playerName);
 
-	var tdValues = "";
-	for (var i = 0; i <= 10; i++) {
-	    tdValues += "<option value=" + i + ">" + i + "</option>";
-	}
-	document.getElementById('tds').innerHTML = tdValues;
-
-	// INTS
-
-	var intValues = "";
-	for (var i = 0; i <= 10; i++) {
-	    intValues += "<option value=" + i + ">" + i + "</option>";
-	}
-	document.getElementById('ints').innerHTML = tdValues;
-
-	// WIN
-
-	var winValues = "";
-	for (var i = 0; i <= 1; i++) {
-	    winValues += "<option value=" + i + ">" + i + "</option>";
-	}
-	document.getElementById('win').innerHTML = winValues;
-
-	// POINTS PER DRIVE
-
-	var ppdValues = "";
-	for (var i = 0.0; i <= 5.0; i += 0.1) {
-	    ppdValues += "<option value=" + i + ">" + i + "</option>";
-	}
-	document.getElementById('pointsPerDrive').innerHTML = ppdValues;
-
-	// RUSH YARDS
-
-	var rushYardValues = "";
-	for (var i = 0; i <= 300; i++) {
-	    rushYardValues += "<option value=" + i + ">" + i + "</option>";
-	}
-	document.getElementById('rushYrds').innerHTML = rushYardValues;
-
-	// RUSH TDS
-
-	var rushTdValues = "";
-	for (var i = 0; i <= 10; i++) {
-	    rushTdValues += "<option value=" + i + ">" + i + "</option>";
-	}
-	document.getElementById('rushTds').innerHTML = rushTdValues;
+	  populatePlayerInputData(jsonPlayerObject);
+	}, false);
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+	module.exports = [
+		{
+			"NAME": "Tom Brady",
+			"TEAM": "NWE",
+			"AGE": "38",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "10-2-0",
+			"COMPLETIONS": "323",
+			"ATTEMPTS": "507",
+			"COMPLETION_PERCENTAGE": "63.7",
+			"YARDS": "3912",
+			"TOUCHDOWNS": "31",
+			"TOUCHDOWN_PERCENTAGE": "6.1",
+			"INTERCEPTIONS": "6",
+			"INTERCEPTION_PERCENTAGE": "1.2",
+			"YARDS_PER_ATTEMPT": "7.7",
+			"YARDS_PER_GAME": "326.0",
+			"QB_RATING": "102.8",
+			"QBR": "64.48",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "31.3"
+		},
+		{
+			"NAME": "Philip Rivers",
+			"TEAM": "SDG",
+			"AGE": "34",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "3-9-0",
+			"COMPLETIONS": "335",
+			"ATTEMPTS": "498",
+			"COMPLETION_PERCENTAGE": "67.3",
+			"YARDS": "3713",
+			"TOUCHDOWNS": "23",
+			"TOUCHDOWN_PERCENTAGE": "4.6",
+			"INTERCEPTIONS": "9",
+			"INTERCEPTION_PERCENTAGE": "1.8",
+			"YARDS_PER_ATTEMPT": "7.5",
+			"YARDS_PER_GAME": "309.4",
+			"QB_RATING": "97.1",
+			"QBR": "61.85",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "20.6"
+		},
+		{
+			"NAME": "Matt Ryan",
+			"TEAM": "ATL",
+			"AGE": "30",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "6-6-0",
+			"COMPLETIONS": "316",
+			"ATTEMPTS": "479",
+			"COMPLETION_PERCENTAGE": "66.0",
+			"YARDS": "3481",
+			"TOUCHDOWNS": "17",
+			"TOUCHDOWN_PERCENTAGE": "3.5",
+			"INTERCEPTIONS": "13",
+			"INTERCEPTION_PERCENTAGE": "2.7",
+			"YARDS_PER_ATTEMPT": "7.3",
+			"YARDS_PER_GAME": "290.1",
+			"QB_RATING": "87.9",
+			"QBR": "60.08",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "23.3"
+		},
+		{
+			"NAME": "Blake Bortles",
+			"TEAM": "JAX",
+			"AGE": "24",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "4-8-0",
+			"COMPLETIONS": "272",
+			"ATTEMPTS": "471",
+			"COMPLETION_PERCENTAGE": "57.7",
+			"YARDS": "3274",
+			"TOUCHDOWNS": "27",
+			"TOUCHDOWN_PERCENTAGE": "5.7",
+			"INTERCEPTIONS": "13",
+			"INTERCEPTION_PERCENTAGE": "2.8",
+			"YARDS_PER_ATTEMPT": "7.0",
+			"YARDS_PER_GAME": "272.8",
+			"QB_RATING": "86.8",
+			"QBR": "54.86",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "22.9"
+		},
+		{
+			"NAME": "Eli Manning",
+			"TEAM": "NYG",
+			"AGE": "34",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "5-7-0",
+			"COMPLETIONS": "292",
+			"ATTEMPTS": "469",
+			"COMPLETION_PERCENTAGE": "62.3",
+			"YARDS": "3318",
+			"TOUCHDOWNS": "24",
+			"TOUCHDOWN_PERCENTAGE": "5.1",
+			"INTERCEPTIONS": "10",
+			"INTERCEPTION_PERCENTAGE": "2.1",
+			"YARDS_PER_ATTEMPT": "7.1",
+			"YARDS_PER_GAME": "276.5",
+			"QB_RATING": "91.6",
+			"QBR": "62.38",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "25.6"
+		},
+		{
+			"NAME": "Drew Brees",
+			"TEAM": "NOR",
+			"AGE": "36",
+			"POSITION": "QB",
+			"GAMES": "11",
+			"GAMES_STARTED": "11",
+			"RECORD": "4-7-0",
+			"COMPLETIONS": "306",
+			"ATTEMPTS": "456",
+			"COMPLETION_PERCENTAGE": "67.1",
+			"YARDS": "3482",
+			"TOUCHDOWNS": "23",
+			"TOUCHDOWN_PERCENTAGE": "5.0",
+			"INTERCEPTIONS": "11",
+			"INTERCEPTION_PERCENTAGE": "2.4",
+			"YARDS_PER_ATTEMPT": "7.6",
+			"YARDS_PER_GAME": "316.5",
+			"QB_RATING": "96.6",
+			"QBR": "65.93",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "24.9"
+		},
+		{
+			"NAME": "Matthew Stafford",
+			"TEAM": "DET",
+			"AGE": "27",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "4-8-0",
+			"COMPLETIONS": "289",
+			"ATTEMPTS": "445",
+			"COMPLETION_PERCENTAGE": "64.9",
+			"YARDS": "3164",
+			"TOUCHDOWNS": "22",
+			"TOUCHDOWN_PERCENTAGE": "4.9",
+			"INTERCEPTIONS": "12",
+			"INTERCEPTION_PERCENTAGE": "2.7",
+			"YARDS_PER_ATTEMPT": "7.1",
+			"YARDS_PER_GAME": "263.7",
+			"QB_RATING": "91.1",
+			"QBR": "56.26",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "21.1"
+		},
+		{
+			"NAME": "Ryan Tannehill",
+			"TEAM": "MIA",
+			"AGE": "27",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "5-7-0",
+			"COMPLETIONS": "268",
+			"ATTEMPTS": "436",
+			"COMPLETION_PERCENTAGE": "61.5",
+			"YARDS": "3079",
+			"TOUCHDOWNS": "21",
+			"TOUCHDOWN_PERCENTAGE": "4.8",
+			"INTERCEPTIONS": "11",
+			"INTERCEPTION_PERCENTAGE": "2.5",
+			"YARDS_PER_ATTEMPT": "7.1",
+			"YARDS_PER_GAME": "256.6",
+			"QB_RATING": "88.3",
+			"QBR": "33.98",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "20.0"
+		},
+		{
+			"NAME": "Derek Carr",
+			"TEAM": "OAK",
+			"AGE": "24",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "5-7-0",
+			"COMPLETIONS": "271",
+			"ATTEMPTS": "426",
+			"COMPLETION_PERCENTAGE": "63.6",
+			"YARDS": "3178",
+			"TOUCHDOWNS": "26",
+			"TOUCHDOWN_PERCENTAGE": "6.1",
+			"INTERCEPTIONS": "9",
+			"INTERCEPTION_PERCENTAGE": "2.1",
+			"YARDS_PER_ATTEMPT": "7.5",
+			"YARDS_PER_GAME": "264.8",
+			"QB_RATING": "97.7",
+			"QBR": "60.31",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "23.7"
+		},
+		{
+			"NAME": "Aaron Rodgers",
+			"TEAM": "GNB",
+			"AGE": "32",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "8-4-0",
+			"COMPLETIONS": "260",
+			"ATTEMPTS": "426",
+			"COMPLETION_PERCENTAGE": "61.0",
+			"YARDS": "2957",
+			"TOUCHDOWNS": "26",
+			"TOUCHDOWN_PERCENTAGE": "6.1",
+			"INTERCEPTIONS": "5",
+			"INTERCEPTION_PERCENTAGE": "1.2",
+			"YARDS_PER_ATTEMPT": "6.9",
+			"YARDS_PER_GAME": "246.4",
+			"QB_RATING": "97.3",
+			"QBR": "69.39",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "24.1"
+		},
+		{
+			"NAME": "Kirk Cousins",
+			"TEAM": "WAS",
+			"AGE": "27",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "5-7-0",
+			"COMPLETIONS": "290",
+			"ATTEMPTS": "423",
+			"COMPLETION_PERCENTAGE": "68.6",
+			"YARDS": "3006",
+			"TOUCHDOWNS": "17",
+			"TOUCHDOWN_PERCENTAGE": "4.0",
+			"INTERCEPTIONS": "10",
+			"INTERCEPTION_PERCENTAGE": "2.4",
+			"YARDS_PER_ATTEMPT": "7.1",
+			"YARDS_PER_GAME": "250.5",
+			"QB_RATING": "92.4",
+			"QBR": "57.72",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "21.4"
+		},
+		{
+			"NAME": "Carson Palmer",
+			"TEAM": "ARI",
+			"AGE": "36",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "10-2-0",
+			"COMPLETIONS": "267",
+			"ATTEMPTS": "418",
+			"COMPLETION_PERCENTAGE": "63.9",
+			"YARDS": "3693",
+			"TOUCHDOWNS": "29",
+			"TOUCHDOWN_PERCENTAGE": "6.9",
+			"INTERCEPTIONS": "9",
+			"INTERCEPTION_PERCENTAGE": "2.2",
+			"YARDS_PER_ATTEMPT": "8.8",
+			"YARDS_PER_GAME": "307.8",
+			"QB_RATING": "106.3",
+			"QBR": "82.58",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "31.8"
+		},
+		{
+			"NAME": "Joe Flacco",
+			"TEAM": "BAL",
+			"AGE": "30",
+			"POSITION": "QB",
+			"GAMES": "10",
+			"GAMES_STARTED": "10",
+			"RECORD": "3-7-0",
+			"COMPLETIONS": "266",
+			"ATTEMPTS": "413",
+			"COMPLETION_PERCENTAGE": "64.4",
+			"YARDS": "2791",
+			"TOUCHDOWNS": "14",
+			"TOUCHDOWN_PERCENTAGE": "3.4",
+			"INTERCEPTIONS": "12",
+			"INTERCEPTION_PERCENTAGE": "2.9",
+			"YARDS_PER_ATTEMPT": "6.8",
+			"YARDS_PER_GAME": "279.1",
+			"QB_RATING": "83.1",
+			"QBR": "40.86",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "22.7"
+		},
+		{
+			"NAME": "Ryan Fitzpatrick",
+			"TEAM": "NYJ",
+			"AGE": "33",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "7-5-0",
+			"COMPLETIONS": "246",
+			"ATTEMPTS": "409",
+			"COMPLETION_PERCENTAGE": "60.1",
+			"YARDS": "2866",
+			"TOUCHDOWNS": "22",
+			"TOUCHDOWN_PERCENTAGE": "5.4",
+			"INTERCEPTIONS": "11",
+			"INTERCEPTION_PERCENTAGE": "2.7",
+			"YARDS_PER_ATTEMPT": "7.0",
+			"YARDS_PER_GAME": "238.8",
+			"QB_RATING": "88.1",
+			"QBR": "68.47",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "24.6"
+		},
+		{
+			"NAME": "Andy Dalton",
+			"TEAM": "CIN",
+			"AGE": "28",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "10-2-0",
+			"COMPLETIONS": "252",
+			"ATTEMPTS": "381",
+			"COMPLETION_PERCENTAGE": "66.1",
+			"YARDS": "3191",
+			"TOUCHDOWNS": "25",
+			"TOUCHDOWN_PERCENTAGE": "6.6",
+			"INTERCEPTIONS": "6",
+			"INTERCEPTION_PERCENTAGE": "1.6",
+			"YARDS_PER_ATTEMPT": "8.4",
+			"YARDS_PER_GAME": "265.9",
+			"QB_RATING": "107.4",
+			"QBR": "74.41",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "27.8"
+		},
+		{
+			"NAME": "Jameis Winston",
+			"TEAM": "TAM",
+			"AGE": "21",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "6-6-0",
+			"COMPLETIONS": "221",
+			"ATTEMPTS": "377",
+			"COMPLETION_PERCENTAGE": "58.6",
+			"YARDS": "2877",
+			"TOUCHDOWNS": "17",
+			"TOUCHDOWN_PERCENTAGE": "4.5",
+			"INTERCEPTIONS": "11",
+			"INTERCEPTION_PERCENTAGE": "2.9",
+			"YARDS_PER_ATTEMPT": "7.6",
+			"YARDS_PER_GAME": "239.8",
+			"QB_RATING": "85.6",
+			"QBR": "61.88",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "22.6"
+		},
+		{
+			"NAME": "Alex Smith",
+			"TEAM": "KAN",
+			"AGE": "31",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "7-5-0",
+			"COMPLETIONS": "242",
+			"ATTEMPTS": "376",
+			"COMPLETION_PERCENTAGE": "64.4",
+			"YARDS": "2843",
+			"TOUCHDOWNS": "14",
+			"TOUCHDOWN_PERCENTAGE": "3.7",
+			"INTERCEPTIONS": "3",
+			"INTERCEPTION_PERCENTAGE": "0.8",
+			"YARDS_PER_ATTEMPT": "7.6",
+			"YARDS_PER_GAME": "236.9",
+			"QB_RATING": "96.3",
+			"QBR": "61.07",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "26.8"
+		},
+		{
+			"NAME": "Cam Newton",
+			"TEAM": "CAR",
+			"AGE": "26",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "12-0-0",
+			"COMPLETIONS": "218",
+			"ATTEMPTS": "374",
+			"COMPLETION_PERCENTAGE": "58.3",
+			"YARDS": "2797",
+			"TOUCHDOWNS": "25",
+			"TOUCHDOWN_PERCENTAGE": "6.7",
+			"INTERCEPTIONS": "10",
+			"INTERCEPTION_PERCENTAGE": "2.7",
+			"YARDS_PER_ATTEMPT": "7.5",
+			"YARDS_PER_GAME": "233.1",
+			"QB_RATING": "93.0",
+			"QBR": "62.72",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "31.1"
+		},
+		{
+			"NAME": "Jay Cutler",
+			"TEAM": "CHI",
+			"AGE": "32",
+			"POSITION": "QB",
+			"GAMES": "11",
+			"GAMES_STARTED": "11",
+			"RECORD": "5-6-0",
+			"COMPLETIONS": "229",
+			"ATTEMPTS": "365",
+			"COMPLETION_PERCENTAGE": "62.7",
+			"YARDS": "2712",
+			"TOUCHDOWNS": "14",
+			"TOUCHDOWN_PERCENTAGE": "3.8",
+			"INTERCEPTIONS": "7",
+			"INTERCEPTION_PERCENTAGE": "1.9",
+			"YARDS_PER_ATTEMPT": "7.4",
+			"YARDS_PER_GAME": "246.5",
+			"QB_RATING": "90.1",
+			"QBR": "63.18",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "20.9"
+		},
+		{
+			"NAME": "Sam Bradford",
+			"TEAM": "PHI",
+			"AGE": "28",
+			"POSITION": "QB",
+			"GAMES": "10",
+			"GAMES_STARTED": "10",
+			"RECORD": "5-5-0",
+			"COMPLETIONS": "228",
+			"ATTEMPTS": "359",
+			"COMPLETION_PERCENTAGE": "63.5",
+			"YARDS": "2417",
+			"TOUCHDOWNS": "13",
+			"TOUCHDOWN_PERCENTAGE": "3.6",
+			"INTERCEPTIONS": "10",
+			"INTERCEPTION_PERCENTAGE": "2.8",
+			"YARDS_PER_ATTEMPT": "6.7",
+			"YARDS_PER_GAME": "241.7",
+			"QB_RATING": "83.5",
+			"QBR": "37.08",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "23.2"
+		},
+		{
+			"NAME": "Russell Wilson",
+			"TEAM": "SEA",
+			"AGE": "27",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "7-5-0",
+			"COMPLETIONS": "241",
+			"ATTEMPTS": "352",
+			"COMPLETION_PERCENTAGE": "68.5",
+			"YARDS": "2997",
+			"TOUCHDOWNS": "21",
+			"TOUCHDOWN_PERCENTAGE": "6.0",
+			"INTERCEPTIONS": "7",
+			"INTERCEPTION_PERCENTAGE": "2.0",
+			"YARDS_PER_ATTEMPT": "8.5",
+			"YARDS_PER_GAME": "249.8",
+			"QB_RATING": "106.2",
+			"QBR": "69",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "25.4"
+		},
+		{
+			"NAME": "Teddy Bridgewater",
+			"TEAM": "MIN",
+			"AGE": "23",
+			"POSITION": "QB",
+			"GAMES": "12",
+			"GAMES_STARTED": "12",
+			"RECORD": "8-4-0",
+			"COMPLETIONS": "225",
+			"ATTEMPTS": "347",
+			"COMPLETION_PERCENTAGE": "64.8",
+			"YARDS": "2398",
+			"TOUCHDOWNS": "8",
+			"TOUCHDOWN_PERCENTAGE": "2.3",
+			"INTERCEPTIONS": "8",
+			"INTERCEPTION_PERCENTAGE": "2.3",
+			"YARDS_PER_ATTEMPT": "6.9",
+			"YARDS_PER_GAME": "199.8",
+			"QB_RATING": "83.0",
+			"QBR": "60.83",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "19.8"
+		},
+		{
+			"NAME": "Nick Foles",
+			"TEAM": "STL",
+			"AGE": "26",
+			"POSITION": "QB",
+			"GAMES": "11",
+			"GAMES_STARTED": "11",
+			"RECORD": "4-7-0",
+			"COMPLETIONS": "190",
+			"ATTEMPTS": "337",
+			"COMPLETION_PERCENTAGE": "56.4",
+			"YARDS": "2052",
+			"TOUCHDOWNS": "7",
+			"TOUCHDOWN_PERCENTAGE": "2.1",
+			"INTERCEPTIONS": "10",
+			"INTERCEPTION_PERCENTAGE": "3.0",
+			"YARDS_PER_ATTEMPT": "6.1",
+			"YARDS_PER_GAME": "186.5",
+			"QB_RATING": "69.0",
+			"QBR": "30.01",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "15.8"
+		},
+		{
+			"NAME": "Marcus Mariota",
+			"TEAM": "TEN",
+			"AGE": "22",
+			"POSITION": "QB",
+			"GAMES": "10",
+			"GAMES_STARTED": "10",
+			"RECORD": "3-7-0",
+			"COMPLETIONS": "206",
+			"ATTEMPTS": "325",
+			"COMPLETION_PERCENTAGE": "63.4",
+			"YARDS": "2512",
+			"TOUCHDOWNS": "19",
+			"TOUCHDOWN_PERCENTAGE": "5.8",
+			"INTERCEPTIONS": "9",
+			"INTERCEPTION_PERCENTAGE": "2.8",
+			"YARDS_PER_ATTEMPT": "7.7",
+			"YARDS_PER_GAME": "251.2",
+			"QB_RATING": "95.1",
+			"QBR": "66.34",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "20.4"
+		},
+		{
+			"NAME": "Peyton Manning",
+			"TEAM": "DEN",
+			"AGE": "39",
+			"POSITION": "qb",
+			"GAMES": "9",
+			"GAMES_STARTED": "9",
+			"RECORD": "7-2-0",
+			"COMPLETIONS": "193",
+			"ATTEMPTS": "322",
+			"COMPLETION_PERCENTAGE": "59.9",
+			"YARDS": "2180",
+			"TOUCHDOWNS": "9",
+			"TOUCHDOWN_PERCENTAGE": "2.8",
+			"INTERCEPTIONS": "17",
+			"INTERCEPTION_PERCENTAGE": "5.3",
+			"YARDS_PER_ATTEMPT": "6.8",
+			"YARDS_PER_GAME": "242.2",
+			"QB_RATING": "67.6",
+			"QBR": "45",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "22.4"
+		},
+		{
+			"NAME": "Brian Hoyer",
+			"TEAM": "HOU",
+			"AGE": "30",
+			"POSITION": "qb",
+			"GAMES": "9",
+			"GAMES_STARTED": "7",
+			"RECORD": "4-3-0",
+			"COMPLETIONS": "188",
+			"ATTEMPTS": "307",
+			"COMPLETION_PERCENTAGE": "61.2",
+			"YARDS": "2202",
+			"TOUCHDOWNS": "18",
+			"TOUCHDOWN_PERCENTAGE": "5.9",
+			"INTERCEPTIONS": "6",
+			"INTERCEPTION_PERCENTAGE": "2.0",
+			"YARDS_PER_ATTEMPT": "7.2",
+			"YARDS_PER_GAME": "244.7",
+			"QB_RATING": "94.4",
+			"QBR": "69.1",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "21.1"
+		},
+		{
+			"NAME": "Ben Roethlisberger",
+			"TEAM": "PIT",
+			"AGE": "33",
+			"POSITION": "qb",
+			"GAMES": "8",
+			"GAMES_STARTED": "7",
+			"RECORD": "4-3-0",
+			"COMPLETIONS": "201",
+			"ATTEMPTS": "305",
+			"COMPLETION_PERCENTAGE": "65.9",
+			"YARDS": "2707",
+			"TOUCHDOWNS": "15",
+			"TOUCHDOWN_PERCENTAGE": "4.9",
+			"INTERCEPTIONS": "9",
+			"INTERCEPTION_PERCENTAGE": "3.0",
+			"YARDS_PER_ATTEMPT": "8.9",
+			"YARDS_PER_GAME": "338.4",
+			"QB_RATING": "98.1",
+			"QBR": "77.15",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "25.9"
+		},
+		{
+			"NAME": "Andrew Luck",
+			"TEAM": "IND",
+			"AGE": "26",
+			"POSITION": "qb",
+			"GAMES": "7",
+			"GAMES_STARTED": "7",
+			"RECORD": "2-5-0",
+			"COMPLETIONS": "162",
+			"ATTEMPTS": "293",
+			"COMPLETION_PERCENTAGE": "55.3",
+			"YARDS": "1881",
+			"TOUCHDOWNS": "15",
+			"TOUCHDOWN_PERCENTAGE": "5.1",
+			"INTERCEPTIONS": "12",
+			"INTERCEPTION_PERCENTAGE": "4.1",
+			"YARDS_PER_ATTEMPT": "6.4",
+			"YARDS_PER_GAME": "268.7",
+			"QB_RATING": "74.9",
+			"QBR": "47.57",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "21.6"
+		},
+		{
+			"NAME": "Josh McCown",
+			"TEAM": "CLE",
+			"AGE": "36",
+			"POSITION": "qb",
+			"GAMES": "8",
+			"GAMES_STARTED": "8",
+			"RECORD": "1-7-0",
+			"COMPLETIONS": "186",
+			"ATTEMPTS": "292",
+			"COMPLETION_PERCENTAGE": "63.7",
+			"YARDS": "2109",
+			"TOUCHDOWNS": "12",
+			"TOUCHDOWN_PERCENTAGE": "4.1",
+			"INTERCEPTIONS": "4",
+			"INTERCEPTION_PERCENTAGE": "1.4",
+			"YARDS_PER_ATTEMPT": "7.2",
+			"YARDS_PER_GAME": "263.6",
+			"QB_RATING": "93.3",
+			"QBR": "53.92",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "18.0"
+		},
+		{
+			"NAME": "Tyrod Taylor",
+			"TEAM": "BUF",
+			"AGE": "26",
+			"POSITION": "QB",
+			"GAMES": "10",
+			"GAMES_STARTED": "10",
+			"RECORD": "5-4-0",
+			"COMPLETIONS": "176",
+			"ATTEMPTS": "271",
+			"COMPLETION_PERCENTAGE": "64.9",
+			"YARDS": "2171",
+			"TOUCHDOWNS": "17",
+			"TOUCHDOWN_PERCENTAGE": "6.3",
+			"INTERCEPTIONS": "4",
+			"INTERCEPTION_PERCENTAGE": "1.5",
+			"YARDS_PER_ATTEMPT": "8.0",
+			"YARDS_PER_GAME": "217.1",
+			"QB_RATING": "104.3",
+			"QBR": "69.61",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "24.7"
+		},
+		{
+			"NAME": "Colin Kaepernick",
+			"TEAM": "SFO",
+			"AGE": "28",
+			"POSITION": "qb",
+			"GAMES": "9",
+			"GAMES_STARTED": "8",
+			"RECORD": "2-6-0",
+			"COMPLETIONS": "144",
+			"ATTEMPTS": "244",
+			"COMPLETION_PERCENTAGE": "59.0",
+			"YARDS": "1615",
+			"TOUCHDOWNS": "6",
+			"TOUCHDOWN_PERCENTAGE": "2.5",
+			"INTERCEPTIONS": "5",
+			"INTERCEPTION_PERCENTAGE": "2.0",
+			"YARDS_PER_ATTEMPT": "6.6",
+			"YARDS_PER_GAME": "179.4",
+			"QB_RATING": "78.5",
+			"QBR": "47.14",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "14.8"
+		},
+		{
+			"NAME": "Matt Hasselbeck",
+			"TEAM": "IND",
+			"AGE": "40",
+			"POSITION": "qb",
+			"GAMES": "5",
+			"GAMES_STARTED": "5",
+			"RECORD": "4-1-0",
+			"COMPLETIONS": "113",
+			"ATTEMPTS": "176",
+			"COMPLETION_PERCENTAGE": "64.2",
+			"YARDS": "1192",
+			"TOUCHDOWNS": "8",
+			"TOUCHDOWN_PERCENTAGE": "4.5",
+			"INTERCEPTIONS": "4",
+			"INTERCEPTION_PERCENTAGE": "2.3",
+			"YARDS_PER_ATTEMPT": "6.8",
+			"YARDS_PER_GAME": "238.4",
+			"QB_RATING": "89.5",
+			"QBR": "63.06",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "21.6"
+		},
+		{
+			"NAME": "Matt Cassel",
+			"TEAM": "2TM",
+			"AGE": "33",
+			"POSITION": "",
+			"GAMES": "7",
+			"GAMES_STARTED": "6",
+			"RECORD": "2-4-0",
+			"COMPLETIONS": "103",
+			"ATTEMPTS": "168",
+			"COMPLETION_PERCENTAGE": "61.3",
+			"YARDS": "1124",
+			"TOUCHDOWNS": "5",
+			"TOUCHDOWN_PERCENTAGE": "3.0",
+			"INTERCEPTIONS": "5",
+			"INTERCEPTION_PERCENTAGE": "3.0",
+			"YARDS_PER_ATTEMPT": "6.7",
+			"YARDS_PER_GAME": "160.6",
+			"QB_RATING": "78.6",
+			"QBR": "93.78",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "18.6"
+		},
+		{
+			"NAME": "Ryan Mallett",
+			"TEAM": "HOU",
+			"AGE": "27",
+			"POSITION": "qb",
+			"GAMES": "6",
+			"GAMES_STARTED": "4",
+			"RECORD": "1-3-0",
+			"COMPLETIONS": "78",
+			"ATTEMPTS": "147",
+			"COMPLETION_PERCENTAGE": "53.1",
+			"YARDS": "770",
+			"TOUCHDOWNS": "3",
+			"TOUCHDOWN_PERCENTAGE": "2.0",
+			"INTERCEPTIONS": "4",
+			"INTERCEPTION_PERCENTAGE": "2.7",
+			"YARDS_PER_ATTEMPT": "5.2",
+			"YARDS_PER_GAME": "128.3",
+			"QB_RATING": "63.6",
+			"QBR": "51.5",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "21.1"
+		},
+		{
+			"NAME": "Johnny Manziel",
+			"TEAM": "CLE",
+			"AGE": "23",
+			"POSITION": "qb",
+			"GAMES": "7",
+			"GAMES_STARTED": "3",
+			"RECORD": "1-2-0",
+			"COMPLETIONS": "76",
+			"ATTEMPTS": "128",
+			"COMPLETION_PERCENTAGE": "59.4",
+			"YARDS": "933",
+			"TOUCHDOWNS": "5",
+			"TOUCHDOWN_PERCENTAGE": "3.9",
+			"INTERCEPTIONS": "2",
+			"INTERCEPTION_PERCENTAGE": "1.6",
+			"YARDS_PER_ATTEMPT": "7.3",
+			"YARDS_PER_GAME": "133.3",
+			"QB_RATING": "88.4",
+			"QBR": "54.2",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "18.0"
+		},
+		{
+			"NAME": "Blaine Gabbert",
+			"TEAM": "SFO",
+			"AGE": "26",
+			"POSITION": "qb",
+			"GAMES": "4",
+			"GAMES_STARTED": "4",
+			"RECORD": "2-2-0",
+			"COMPLETIONS": "80",
+			"ATTEMPTS": "127",
+			"COMPLETION_PERCENTAGE": "63.0",
+			"YARDS": "963",
+			"TOUCHDOWNS": "5",
+			"TOUCHDOWN_PERCENTAGE": "3.9",
+			"INTERCEPTIONS": "3",
+			"INTERCEPTION_PERCENTAGE": "2.4",
+			"YARDS_PER_ATTEMPT": "7.6",
+			"YARDS_PER_GAME": "240.8",
+			"QB_RATING": "89.5",
+			"QBR": "61.35",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "14.8"
+		},
+		{
+			"NAME": "Tony Romo",
+			"TEAM": "DAL",
+			"AGE": "35",
+			"POSITION": "qb",
+			"GAMES": "4",
+			"GAMES_STARTED": "4",
+			"RECORD": "3-1-0",
+			"COMPLETIONS": "83",
+			"ATTEMPTS": "121",
+			"COMPLETION_PERCENTAGE": "68.6",
+			"YARDS": "884",
+			"TOUCHDOWNS": "5",
+			"TOUCHDOWN_PERCENTAGE": "4.1",
+			"INTERCEPTIONS": "7",
+			"INTERCEPTION_PERCENTAGE": "5.8",
+			"YARDS_PER_ATTEMPT": "7.3",
+			"YARDS_PER_GAME": "221.0",
+			"QB_RATING": "79.4",
+			"QBR": "55.75",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "18.6"
+		},
+		{
+			"NAME": "Brock Osweiler",
+			"TEAM": "DEN",
+			"AGE": "25",
+			"POSITION": "qb",
+			"GAMES": "4",
+			"GAMES_STARTED": "3",
+			"RECORD": "3-0-0",
+			"COMPLETIONS": "73",
+			"ATTEMPTS": "119",
+			"COMPLETION_PERCENTAGE": "61.3",
+			"YARDS": "832",
+			"TOUCHDOWNS": "5",
+			"TOUCHDOWN_PERCENTAGE": "4.2",
+			"INTERCEPTIONS": "3",
+			"INTERCEPTION_PERCENTAGE": "2.5",
+			"YARDS_PER_ATTEMPT": "7.0",
+			"YARDS_PER_GAME": "208.0",
+			"QB_RATING": "85.8",
+			"QBR": "58.77",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "22.4"
+		},
+		{
+			"NAME": "Brandon Weeden",
+			"TEAM": "DAL",
+			"AGE": "32",
+			"POSITION": "qb",
+			"GAMES": "4",
+			"GAMES_STARTED": "3",
+			"RECORD": "0-3-0",
+			"COMPLETIONS": "71",
+			"ATTEMPTS": "98",
+			"COMPLETION_PERCENTAGE": "72.4",
+			"YARDS": "739",
+			"TOUCHDOWNS": "2",
+			"TOUCHDOWN_PERCENTAGE": "2.0",
+			"INTERCEPTIONS": "2",
+			"INTERCEPTION_PERCENTAGE": "2.0",
+			"YARDS_PER_ATTEMPT": "7.5",
+			"YARDS_PER_GAME": "184.8",
+			"QB_RATING": "92.2",
+			"QBR": "58.73",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "18.6"
+		},
+		{
+			"NAME": "Mark Sanchez",
+			"TEAM": "PHI",
+			"AGE": "29",
+			"POSITION": "qb",
+			"GAMES": "3",
+			"GAMES_STARTED": "2",
+			"RECORD": "0-2-0",
+			"COMPLETIONS": "59",
+			"ATTEMPTS": "91",
+			"COMPLETION_PERCENTAGE": "64.8",
+			"YARDS": "616",
+			"TOUCHDOWNS": "4",
+			"TOUCHDOWN_PERCENTAGE": "4.4",
+			"INTERCEPTIONS": "4",
+			"INTERCEPTION_PERCENTAGE": "4.4",
+			"YARDS_PER_ATTEMPT": "6.8",
+			"YARDS_PER_GAME": "205.3",
+			"QB_RATING": "80.7",
+			"QBR": "38.85",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "23.2"
+		},
+		{
+			"NAME": "EJ Manuel",
+			"TEAM": "BUF",
+			"AGE": "25",
+			"POSITION": "qb",
+			"GAMES": "4",
+			"GAMES_STARTED": "2",
+			"RECORD": "0-2-0",
+			"COMPLETIONS": "52",
+			"ATTEMPTS": "84",
+			"COMPLETION_PERCENTAGE": "61.9",
+			"YARDS": "561",
+			"TOUCHDOWNS": "3",
+			"TOUCHDOWN_PERCENTAGE": "3.6",
+			"INTERCEPTIONS": "3",
+			"INTERCEPTION_PERCENTAGE": "3.6",
+			"YARDS_PER_ATTEMPT": "6.7",
+			"YARDS_PER_GAME": "140.3",
+			"QB_RATING": "78.5",
+			"QBR": "35.25",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "24.7"
+		},
+		{
+			"NAME": "Matt Schaub",
+			"TEAM": "BAL",
+			"AGE": "34",
+			"POSITION": "qb",
+			"GAMES": "2",
+			"GAMES_STARTED": "2",
+			"RECORD": "1-1-0",
+			"COMPLETIONS": "52",
+			"ATTEMPTS": "80",
+			"COMPLETION_PERCENTAGE": "65.0",
+			"YARDS": "540",
+			"TOUCHDOWNS": "3",
+			"TOUCHDOWN_PERCENTAGE": "3.8",
+			"INTERCEPTIONS": "4",
+			"INTERCEPTION_PERCENTAGE": "5.0",
+			"YARDS_PER_ATTEMPT": "6.8",
+			"YARDS_PER_GAME": "270.0",
+			"QB_RATING": "76.0",
+			"QBR": "34.3",
+			"RUSH_YARDS": "",
+			"RUSH_TDS": "",
+			"DRIVES_PER_GAME": "11.7",
+			"POINTS_PER_GAME": "22.7"
+		}
+	];
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _redux = __webpack_require__(4);
+	var _redux = __webpack_require__(5);
 
 	// COMBINE REDUCERS
 
@@ -180,12 +1218,11 @@
 	  switch (action.type) {
 	    case 'ATTEMPTS_POINTS':
 	      var attemptPoints = action.value / 10;
-	      console.log("attempts  = " + attemptPoints + state);
+	      console.log("attempts  = " + attemptPoints);
 	      return state + attemptPoints;
 	    default:
 	      return state;
 	  }
-	  console.log("state = " + state);
 	}
 
 	// COMPLETIONS
@@ -260,6 +1297,7 @@
 	      if (intIntsPoints < 1) {
 	        return state + 1.75;
 	      } else {
+	        console.log("ints = " + intIntsPoints * -2);
 	        return state + intIntsPoints * -2;
 	      }
 	    default:
@@ -346,7 +1384,7 @@
 	}, false);
 
 	var completions = document.getElementById('completions');
-	completions.addEventListener('change', function () {
+	completions.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'COMPLETIONS_POINTS',
 	    value: completions.value
@@ -354,7 +1392,7 @@
 	}, false);
 
 	var completionPercentage = document.getElementById('percentage');
-	completionPercentage.addEventListener('change', function () {
+	completionPercentage.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'COMPLETION_PERCENTAGE_POINTS',
 	    value: completionPercentage.value
@@ -362,7 +1400,7 @@
 	}, false);
 
 	var yards = document.getElementById('yards');
-	yards.addEventListener('change', function () {
+	yards.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'YARDS_POINTS',
 	    value: yards.value
@@ -370,7 +1408,7 @@
 	}, false);
 
 	var tds = document.getElementById('tds');
-	tds.addEventListener('change', function () {
+	tds.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'TDS_POINTS',
 	    value: tds.value
@@ -378,7 +1416,7 @@
 	}, false);
 
 	var ints = document.getElementById('ints');
-	ints.addEventListener('change', function () {
+	ints.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'INTS_POINTS',
 	    value: ints.value
@@ -386,7 +1424,7 @@
 	}, false);
 
 	var win = document.getElementById('win');
-	win.addEventListener('change', function () {
+	win.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'WIN_POINTS',
 	    value: win.value
@@ -394,7 +1432,7 @@
 	}, false);
 
 	var ppd = document.getElementById('pointsPerDrive');
-	ppd.addEventListener('change', function () {
+	ppd.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'PPD_POINTS',
 	    value: ppd.value
@@ -402,7 +1440,7 @@
 	}, false);
 
 	var rushYards = document.getElementById('rushYrds');
-	rushYards.addEventListener('change', function () {
+	rushYards.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'RUSH_YARD_POINTS',
 	    value: rushYards.value
@@ -410,7 +1448,7 @@
 	}, false);
 
 	var rushTds = document.getElementById('rushTds');
-	rushTds.addEventListener('change', function () {
+	rushTds.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'RUSH_TDS_POINTS',
 	    value: rushTds.value
@@ -418,46 +1456,35 @@
 	}, false);
 
 	var resetReducer = document.getElementById('rushTds');
-	rushTds.addEventListener('change', function () {
+	rushTds.addEventListener('value', function () {
 	  store.dispatch({
 	    type: 'RUSH_TDS_POINTS',
 	    value: rushTds.value
 	  });
 	}, false);
 
+	var checkIfCompleted = function checkIfCompleted() {
+	  if (store.getState().attempt != 0 && store.getState().completion != 0 && store.getState().completionPercentage != 0 && store.getState().yards != 0 && store.getState().tds != 0 && store.getState().ppd != 0 && store.getState().rushYards != 0) {
+	    return true;
+	  } else {
+	    return false;
+	  }
+	};
+
+	var calculateStore = function calculateStore() {
+	  return store.getState().attempt + store.getState().completion + store.getState().completionPercentage + store.getState().yards + store.getState().tds + store.getState().ints + store.getState().win + store.getState().ppd;
+	  // store.getState().rushYards +
+	  // store.getState().rushTds;
+	};
+
 	// SUBSCRIBE
 	var scoreValue = document.getElementById('score');
-	var renderScore = function renderScore(score) {
-	  if (store.getState().attempt != 0 && store.getState().completion != 0 && store.getState().completionPercentage != 0 && store.getState().yards != 0 && store.getState().tds != 0 && store.getState().ppd != 0 && store.getState().rushYards != 0) {
-	    // const numberRating = (store.getState().attempt +
-	    //                   store.getState().completion +
-	    //                   store.getState().completionPercentage +
-	    //                   store.getState().yards +
-	    //                   store.getState().tds +
-	    //                   store.getState().ints +
-	    //                   store.getState().win +
-	    //                   store.getState().ppd +
-	    //                   store.getState().rushYards +
-	    //                   store.getState().rushTds);
-	    // console.log("total points =" + numberRating);
-	    // const playerNode = document.createElement("p");
-	    // const playerNodeText = document.createTextNode("player =" + numberRating);
-	    // playerNode.appendChild(playerNodeText);
-	    // console.log("node =" + playerNode);
-	    // scoreValue.appendChild(playerNode);
-	    scoreValue.innerText = store.getState().attempt + store.getState().completion + store.getState().completionPercentage + store.getState().yards + store.getState().tds + store.getState().ints + store.getState().win + store.getState().ppd + store.getState().rushYards + store.getState().rushTds;
-	    // store.getState().completion = 0;
-	    // store.getState().completionPercentage = 0;
-	    // store.getState().yards = 0;
-	    // store.getState().tds = 0;
-	    // store.getState().ints = 0;
-	    // store.getState().win = 0;
-	    // store.getState().ppd = 0;
-	    // store.getState().rushYards = 0;
-	    // store.getState().rushTds = 0;
+	var renderScore = function renderScore() {
+	  if (checkIfCompleted()) {
+	    scoreValue.innerText = calculateStore();
 	  } else {
-	      scoreValue.innerText = 0;
-	    }
+	    scoreValue.innerText = 0;
+	  }
 	};
 
 	renderScore(score);
@@ -465,7 +1492,7 @@
 	store.subscribe(renderScore);
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -474,23 +1501,23 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _createStore = __webpack_require__(5);
+	var _createStore = __webpack_require__(6);
 
 	var _createStore2 = _interopRequireDefault(_createStore);
 
-	var _utilsCombineReducers = __webpack_require__(7);
+	var _utilsCombineReducers = __webpack_require__(8);
 
 	var _utilsCombineReducers2 = _interopRequireDefault(_utilsCombineReducers);
 
-	var _utilsBindActionCreators = __webpack_require__(11);
+	var _utilsBindActionCreators = __webpack_require__(12);
 
 	var _utilsBindActionCreators2 = _interopRequireDefault(_utilsBindActionCreators);
 
-	var _utilsApplyMiddleware = __webpack_require__(12);
+	var _utilsApplyMiddleware = __webpack_require__(13);
 
 	var _utilsApplyMiddleware2 = _interopRequireDefault(_utilsApplyMiddleware);
 
-	var _utilsCompose = __webpack_require__(13);
+	var _utilsCompose = __webpack_require__(14);
 
 	var _utilsCompose2 = _interopRequireDefault(_utilsCompose);
 
@@ -501,7 +1528,7 @@
 	exports.compose = _utilsCompose2['default'];
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -511,7 +1538,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsIsPlainObject = __webpack_require__(6);
+	var _utilsIsPlainObject = __webpack_require__(7);
 
 	var _utilsIsPlainObject2 = _interopRequireDefault(_utilsIsPlainObject);
 
@@ -669,7 +1696,7 @@
 	}
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -704,7 +1731,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -714,17 +1741,17 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _createStore = __webpack_require__(5);
+	var _createStore = __webpack_require__(6);
 
-	var _utilsIsPlainObject = __webpack_require__(6);
+	var _utilsIsPlainObject = __webpack_require__(7);
 
 	var _utilsIsPlainObject2 = _interopRequireDefault(_utilsIsPlainObject);
 
-	var _utilsMapValues = __webpack_require__(9);
+	var _utilsMapValues = __webpack_require__(10);
 
 	var _utilsMapValues2 = _interopRequireDefault(_utilsMapValues);
 
-	var _utilsPick = __webpack_require__(10);
+	var _utilsPick = __webpack_require__(11);
 
 	var _utilsPick2 = _interopRequireDefault(_utilsPick);
 
@@ -838,10 +1865,10 @@
 	}
 
 	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -938,7 +1965,7 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/**
@@ -963,7 +1990,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	/**
@@ -990,7 +2017,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1000,7 +2027,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _utilsMapValues = __webpack_require__(9);
+	var _utilsMapValues = __webpack_require__(10);
 
 	var _utilsMapValues2 = _interopRequireDefault(_utilsMapValues);
 
@@ -1050,7 +2077,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1063,7 +2090,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _compose = __webpack_require__(13);
+	var _compose = __webpack_require__(14);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
@@ -1116,7 +2143,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	/**

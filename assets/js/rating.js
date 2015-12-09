@@ -30,12 +30,11 @@ function attemptReducer(state = 0, action) {
   switch (action.type) {
   case 'ATTEMPTS_POINTS':
     const attemptPoints = action.value / 10;
-    console.log("attempts  = " + attemptPoints + state);
+    console.log("attempts  = " + attemptPoints);
     return state + attemptPoints;
   default:
     return state;
   }
-  console.log("state = " + state)
 }
 
 // COMPLETIONS
@@ -95,6 +94,7 @@ function intsReducer(state = 0, action) {
     if (intIntsPoints < 1) {
       return state + 1.75
     } else {
+      console.log("ints = " + (intIntsPoints * -2));
       return state + (intIntsPoints * -2)
     }
   default:
@@ -171,7 +171,7 @@ attempts.addEventListener('change', () => {
 
 
 const completions = document.getElementById('completions');
-completions.addEventListener('change', () => {
+completions.addEventListener('value', () => {
   store.dispatch({
     type: 'COMPLETIONS_POINTS',
     value: completions.value,
@@ -179,7 +179,7 @@ completions.addEventListener('change', () => {
 }, false);
 
 const completionPercentage = document.getElementById('percentage');
-completionPercentage.addEventListener('change', () => {
+completionPercentage.addEventListener('value', () => {
   store.dispatch({
     type: 'COMPLETION_PERCENTAGE_POINTS',
     value: completionPercentage.value,
@@ -187,7 +187,7 @@ completionPercentage.addEventListener('change', () => {
 }, false);
 
 const yards = document.getElementById('yards');
-yards.addEventListener('change', () => {
+yards.addEventListener('value', () => {
   store.dispatch({
     type: 'YARDS_POINTS',
     value: yards.value,
@@ -195,7 +195,7 @@ yards.addEventListener('change', () => {
 }, false);
 
 const tds = document.getElementById('tds');
-tds.addEventListener('change', () => {
+tds.addEventListener('value', () => {
   store.dispatch({
     type: 'TDS_POINTS',
     value: tds.value,
@@ -203,7 +203,7 @@ tds.addEventListener('change', () => {
 }, false);
 
 const ints = document.getElementById('ints');
-ints.addEventListener('change', () => {
+ints.addEventListener('value', () => {
   store.dispatch({
     type: 'INTS_POINTS',
     value: ints.value,
@@ -211,7 +211,7 @@ ints.addEventListener('change', () => {
 }, false);
 
 const win = document.getElementById('win');
-win.addEventListener('change', () => {
+win.addEventListener('value', () => {
   store.dispatch({
     type: 'WIN_POINTS',
     value: win.value,
@@ -219,7 +219,7 @@ win.addEventListener('change', () => {
 }, false);
 
 const ppd = document.getElementById('pointsPerDrive');
-ppd.addEventListener('change', () => {
+ppd.addEventListener('value', () => {
   store.dispatch({
     type: 'PPD_POINTS',
     value: ppd.value,
@@ -227,7 +227,7 @@ ppd.addEventListener('change', () => {
 }, false);
 
 const rushYards = document.getElementById('rushYrds');
-rushYards.addEventListener('change', () => {
+rushYards.addEventListener('value', () => {
   store.dispatch({
     type: 'RUSH_YARD_POINTS',
     value: rushYards.value,
@@ -235,7 +235,7 @@ rushYards.addEventListener('change', () => {
 }, false);
 
 const rushTds = document.getElementById('rushTds');
-rushTds.addEventListener('change', () => {
+rushTds.addEventListener('value', () => {
   store.dispatch({
     type: 'RUSH_TDS_POINTS',
     value: rushTds.value,
@@ -243,16 +243,14 @@ rushTds.addEventListener('change', () => {
 }, false);
 
 const resetReducer = document.getElementById('rushTds');
-rushTds.addEventListener('change', () => {
+rushTds.addEventListener('value', () => {
   store.dispatch({
     type: 'RUSH_TDS_POINTS',
     value: rushTds.value,
   });
 }, false);
 
-// SUBSCRIBE
-const scoreValue = document.getElementById('score');
-const renderScore = (score) => {
+const checkIfCompleted = () => {
   if (store.getState().attempt != 0 &&
       store.getState().completion != 0 &&
       store.getState().completionPercentage != 0 &&
@@ -260,41 +258,30 @@ const renderScore = (score) => {
       store.getState().tds != 0 &&
       store.getState().ppd != 0 &&
       store.getState().rushYards != 0) {
-      // const numberRating = (store.getState().attempt +
-      //                   store.getState().completion +
-      //                   store.getState().completionPercentage +
-      //                   store.getState().yards +
-      //                   store.getState().tds +
-      //                   store.getState().ints +
-      //                   store.getState().win +
-      //                   store.getState().ppd +
-      //                   store.getState().rushYards +
-      //                   store.getState().rushTds);
-      // console.log("total points =" + numberRating);
-      // const playerNode = document.createElement("p");
-      // const playerNodeText = document.createTextNode("player =" + numberRating); 
-      // playerNode.appendChild(playerNodeText);
-      // console.log("node =" + playerNode);
-      // scoreValue.appendChild(playerNode);
-        scoreValue.innerText = store.getState().attempt +
-                          store.getState().completion +
-                          store.getState().completionPercentage +
-                          store.getState().yards +
-                          store.getState().tds +
-                          store.getState().ints +
-                          store.getState().win +
-                          store.getState().ppd +
-                          store.getState().rushYards +
-                          store.getState().rushTds;
-      // store.getState().completion = 0;
-      // store.getState().completionPercentage = 0;
-      // store.getState().yards = 0;
-      // store.getState().tds = 0;
-      // store.getState().ints = 0;
-      // store.getState().win = 0;
-      // store.getState().ppd = 0;
-      // store.getState().rushYards = 0;
-      // store.getState().rushTds = 0;
+        return true
+      } else {
+        return false
+      }
+}
+
+const calculateStore = () => {
+  return  store.getState().attempt +
+          store.getState().completion +
+          store.getState().completionPercentage +
+          store.getState().yards +
+          store.getState().tds +
+          store.getState().ints +
+          store.getState().win +
+          store.getState().ppd;
+          // store.getState().rushYards +
+          // store.getState().rushTds;
+}
+
+// SUBSCRIBE
+const scoreValue = document.getElementById('score');
+const renderScore = () => {
+  if (checkIfCompleted()) {
+        scoreValue.innerText = calculateStore();
 }
       else {
         scoreValue.innerText = 0

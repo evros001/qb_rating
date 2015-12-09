@@ -33,6 +33,10 @@ module.exports = {
             exclude: /node_modules/,
             loader: "babel-loader"
         }, {
+            test: /\.json$/,
+            exclude: /node_modules/,
+            loader: "json-loader"
+        }, {
             test: /\.(styl|css)$/,
             exclude: /node_modules/,
             loader: PRODUCTION ?
