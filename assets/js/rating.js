@@ -13,10 +13,10 @@ const rootReducer = combineReducers({
   tds: tdsReducer,
   ints: intsReducer,
   win: winReducer,
-  ppd: ppdReducer,
-  rushYards: rushYardReducer,
-  rushTds: rushTdReducer,
-  reset: resetReducer
+  ppd: ppdReducer
+  // rushYards: rushYardReducer,
+  // rushTds: rushTdReducer,
+  // reset: resetReducer
 });
 
 // CREATE STORE
@@ -126,36 +126,36 @@ function ppdReducer(state = 0, action) {
   }
 }
 
-// RUSH YARD STATS
-function rushYardReducer(state = 0, action) {
-  switch (action.type) {
-  case 'RUSH_YARD_POINTS':
-    const rushYardPoints = action.value;
-    const intRushYardPoints = parseInt(rushYardPoints);
-    if (intRushYardPoints > 20) {
-      const trueRushYardPoints = intRushYardPoints/ 2;
-      console.log("rush yards = " + trueRushYardPoints);
-      return state + trueRushYardPoints;
-    } else {
-      const trueRushYardPoints = intRushYardPoints / 10;
-      return state + trueRushYardPoints;
-    }
-  default:
-    return state;
-  }
-}
-
-// RUSH TD STATS
-function rushTdReducer(state = 0, action) {
-  switch (action.type) {
-  case 'RUSH_TDS_POINTS':
-    const rushTdPoints = action.value * 2;
-    console.log("rush tds = " + rushTdPoints);
-    return state + rushTdPoints;
-  default:
-    return state;
-  }
-}
+// // RUSH YARD STATS
+// function rushYardReducer(state = 0, action) {
+//   switch (action.type) {
+//   case 'RUSH_YARD_POINTS':
+//     const rushYardPoints = action.value;
+//     const intRushYardPoints = parseInt(rushYardPoints);
+//     if (intRushYardPoints > 20) {
+//       const trueRushYardPoints = intRushYardPoints/ 2;
+//       console.log("rush yards = " + trueRushYardPoints);
+//       return state + trueRushYardPoints;
+//     } else {
+//       const trueRushYardPoints = intRushYardPoints / 10;
+//       return state + trueRushYardPoints;
+//     }
+//   default:
+//     return state;
+//   }
+// }
+//
+// // RUSH TD STATS
+// function rushTdReducer(state = 0, action) {
+//   switch (action.type) {
+//   case 'RUSH_TDS_POINTS':
+//     const rushTdPoints = action.value * 2;
+//     console.log("rush tds = " + rushTdPoints);
+//     return state + rushTdPoints;
+//   default:
+//     return state;
+//   }
+// }
 
 
 // END REDUCERS
@@ -226,29 +226,21 @@ ppd.addEventListener('value', () => {
   });
 }, false);
 
-const rushYards = document.getElementById('rushYrds');
-rushYards.addEventListener('value', () => {
-  store.dispatch({
-    type: 'RUSH_YARD_POINTS',
-    value: rushYards.value,
-  });
-}, false);
-
-const rushTds = document.getElementById('rushTds');
-rushTds.addEventListener('value', () => {
-  store.dispatch({
-    type: 'RUSH_TDS_POINTS',
-    value: rushTds.value,
-  });
-}, false);
-
-const resetReducer = document.getElementById('rushTds');
-rushTds.addEventListener('value', () => {
-  store.dispatch({
-    type: 'RUSH_TDS_POINTS',
-    value: rushTds.value,
-  });
-}, false);
+// const rushYards = document.getElementById('rushYrds');
+// rushYards.addEventListener('value', () => {
+//   store.dispatch({
+//     type: 'RUSH_YARD_POINTS',
+//     value: rushYards.value,
+//   });
+// }, false);
+//
+// const rushTds = document.getElementById('rushTds');
+// rushTds.addEventListener('value', () => {
+//   store.dispatch({
+//     type: 'RUSH_TDS_POINTS',
+//     value: rushTds.value,
+//   });
+// }, false);
 
 const checkIfCompleted = () => {
   if (store.getState().attempt != 0 &&
@@ -256,8 +248,7 @@ const checkIfCompleted = () => {
       store.getState().completionPercentage != 0 &&
       store.getState().yards != 0 &&
       store.getState().tds != 0 &&
-      store.getState().ppd != 0 &&
-      store.getState().rushYards != 0) {
+      store.getState().ppd != 0) {
         return true
       } else {
         return false
